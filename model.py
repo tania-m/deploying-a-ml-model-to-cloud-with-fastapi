@@ -1,7 +1,11 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.ensemble import RandomForestClassifier
+import numpy as np
 
-# TODO 1: Train and save model
+
+class MissingModelException(Exception):
+    pass
+
 
 # Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
@@ -52,9 +56,10 @@ def train_model(X_train, y_train):
     return model
 
 
-def compute_model_metrics(y, preds):
+def compute_model_metrics(y, preds, beta_value=1):
     """
-    Validates the trained machine learning model using precision, recall, and F1.
+    Validates the trained machine learning model 
+    using precision, recall, and fbeta.
 
     Inputs
     ------
@@ -68,10 +73,26 @@ def compute_model_metrics(y, preds):
     recall : float
     fbeta : float
     """
-    fbeta = fbeta_score(y, preds, beta=1, zero_division=1)
+    
+    # true positives / (true positives + false positives)
     precision = precision_score(y, preds, zero_division=1)
+    
+    # true positives / (true positives + false negatives)
     recall = recall_score(y, preds, zero_division=1)
+    
+    # contrary to f1, fbeta defines a weight 
+    # to balance between precision and recall using the beta parameter
+    # when beta_value = 1, we have the F1 score
+    fbeta = fbeta_score(y, preds, beta=beta_value, zero_division=1)
+    # closer to 1 is better for fbeta
+    
     return precision, recall, fbeta
+
+
+def compute_slice_performance():
+    """ Compute performance on slices of data 
+        for categorical features
+    """
 
 
 def inference(model, X):
@@ -79,7 +100,7 @@ def inference(model, X):
 
     Inputs
     ------
-    model : ???
+    model : Random Forest Classifier
         Trained machine learning model.
     X : np.array
         Data used for prediction.
@@ -88,4 +109,9 @@ def inference(model, X):
     preds : np.array
         Predictions from the model.
     """
-    pass
+    
+    if model is not None:
+        return model.predict(X)
+    
+    # model is not set
+    raise MissingModelException("Cannot make predictions without a model")
