@@ -2,6 +2,8 @@
 
 from sklearn.model_selection import train_test_split
 
+# TODO 1: Train and save model
+
 # Add the necessary imports for the starter code.
 
 # Add code to load in the data.
