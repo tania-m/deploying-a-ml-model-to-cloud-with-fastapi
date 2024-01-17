@@ -1,4 +1,5 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
+from sklearn.ensemble import RandomForestClassifier
 
 # TODO 1: Train and save model
 
@@ -18,8 +19,37 @@ def train_model(X_train, y_train):
     model
         Trained machine learning model.
     """
+    
+    # We want a model that:
+    # - can deal with numerical (age) and categorical features (eg. workclass)
+    # - does not make assumptions about the data distribution
+    #   (as we did not spend a lot of time analyzing it)
+    # - is not influenced too much by possible outliers
+    #   (as we didn't look for or remove outliers in the datasets)
+    # - could do regression or classification (for flexibility)
+    # - should perfomr well even with missing values 
+    #   (we cleaned the dataset to remove missing values, so this
+    #   could come in handy if we decide later on to actually
+    #   keep the missing values instead of removing them)
 
-    pass
+    # Define random forest parameters
+    number_of_trees = 50 # default is 100
+    random_seed = 24 # for reproduceable runs
+    # max_depth = 150 # reduces risk of overfitting
+    
+    # Initialize RandomForestClassifier
+    print("Using Random Forest Classifier")
+    model = RandomForestClassifier(
+        n_estimators=number_of_trees,
+        random_state=random_seed,
+        verbose=1)
+    
+    # Fitting model
+    print("Fitting model")
+    model.fit(X_train, y_train)
+    print("Model fitting DONE!")
+    
+    return model
 
 
 def compute_model_metrics(y, preds):
