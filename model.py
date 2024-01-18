@@ -72,7 +72,8 @@ def compute_model_metrics(y, preds, beta_value=1):
     recall : float
     fbeta : float
     """
-    
+
+
     # true positives / (true positives + false positives)
     precision = precision_score(y, preds, zero_division=1)
     
@@ -84,7 +85,7 @@ def compute_model_metrics(y, preds, beta_value=1):
     # when beta_value = 1, we have the F1 score
     fbeta = fbeta_score(y, preds, beta=beta_value, zero_division=1)
     # closer to 1 is better for fbeta
-    
+
     return precision, recall, fbeta
 
 
@@ -110,14 +111,14 @@ def compute_slice_performance(model, encoder, lb, categorical_features, slice_fe
         SLicing performance evaluation results
         
     """
-    
+
     # Results placeholder
     slice_details = []
-    
+
     # In case we got only one feature
     if not isinstance(slice_features, list):
         slice_features = [slice_features]
-    
+
     # Go over list of feature slices
     for feature in slice_features:
         # For the available categorical values...
@@ -155,9 +156,9 @@ def inference(model, X):
     preds : np.array
         Predictions from the model.
     """
-    
+
     if model is not None:
         return model.predict(X)
-    
+
     # model is not set
     raise MissingModelException("Cannot make predictions without a model")
