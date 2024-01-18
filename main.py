@@ -31,6 +31,64 @@ class PredictionRequestData(BaseModel):
     native_country: str = Field(examples=["United-States", "Cuba", "Jamaica"])
 
 
+def parse_item(request_data):
+    """ Parse request data items
+
+        Inputs
+        ------
+        request_data: input request data of type PredictionRequestData
+
+        Returns
+        -------
+        Parsed request data item
+    """
+
+    parsed_request_data = {
+        "age": request_data.age,
+        "workclass": request_data.workclass, 
+        "fnlgt": request_data.fnlgt,
+        "education": request_data.education,
+        "education-num": request_data.education_num,
+        "marital-status": request_data.marital_status,
+        "occupation": request_data.occupation,
+        "relationship": request_data.relationship,
+        "race": request_data.race,
+        "sex": request_data.sex,
+        "capital-gain": request_data.capital_gain,
+        "capital-loss": request_data.capital_loss,
+        "hours-per-week": request_data.hours_per_week,
+        "native-country": request_data.native_country
+    }
+
+    return parsed_request_data
+
+
+def prepare_inference_df(request_data):
+    """ Prepare data to be used for inference
+
+        Inputs
+        ------
+        request_data: input request data of type PredictionRequestData
+
+        Returns
+        -------
+        Prepare data for inference
+    """
+
+    inference_data_item = parse_item(request_data)
+    input_data = pd.DataFrame(inference_data_item, index=[0])
+    processed_X, y, encoder_from_processing, lb_from_processing = process_data(
+        input_data,
+        categorical_features, # set at server startup
+        x_label, # set at server startup
+        is_training, # set at server startup
+        encoder, # loaded at server startup
+        lb # loaded at server startup
+    )
+    
+    return processed_X
+
+
 # Load model and supporting files
 file_mode = "rb"
 model_folder_path = "model"
@@ -81,32 +139,7 @@ async def root_route():
 # Inference route
 @app.post("/predict")
 async def inference_route(request_data: PredictionRequestData):
-    inference_data_item = {
-        "age": request_data.age,
-        "workclass": request_data.workclass, 
-        "fnlgt": request_data.fnlgt,
-        "education": request_data.education,
-        "education-num": request_data.education_num,
-        "marital-status": request_data.marital_status,
-        "occupation": request_data.occupation,
-        "relationship": request_data.relationship,
-        "race": request_data.race,
-        "sex": request_data.sex,
-        "capital-gain": request_data.capital_gain,
-        "capital-loss": request_data.capital_loss,
-        "hours-per-week": request_data.hours_per_week,
-        "native-country": request_data.native_country
-    }
-
-    input_data = pd.DataFrame(inference_data_item, index=[0])
-    processed_X, y, encoder_from_processing, lb_from_processing = process_data(
-        input_data,
-        categorical_features, # set at server startup
-        x_label, # set at server startup
-        is_training, # set at server startup
-        encoder, # loaded at server startup
-        lb # loaded at server startup
-    )
+    processed_X = prepare_inference_df(request_data)
 
     inference_result = inference(model, processed_X)
     # parse prediction to return a nicer result
@@ -121,8 +154,10 @@ async def inference_route(request_data: PredictionRequestData):
 if __name__ == "__main__":
     host_name = "0.0.0.0"
     port_number = 8000
+    log_level = "info"
+    is_debug = True
     uvicorn.run("main:app",
                 host=host_name,
                 port=port_number,
-                log_level="info",
-                reload=True)
+                log_level=log_level,
+                reload=is_debug)

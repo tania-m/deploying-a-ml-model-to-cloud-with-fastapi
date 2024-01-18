@@ -109,8 +109,7 @@ def compute_slice_performance(model, encoder, lb, categorical_features, slice_fe
             for process_data
         Returns
         -------
-        SLicing performance evaluation results
-        
+        Slicing performance evaluation results
     """
 
     # Results placeholder
