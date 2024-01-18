@@ -142,6 +142,7 @@ async def inference_route(request_data: PredictionRequestData):
     processed_X = prepare_inference_df(request_data)
 
     inference_result = inference(model, processed_X)
+
     # parse prediction to return a nicer result
     # use label binarizer inverse operation to do so, since we have it
     inference_result_values = lb.inverse_transform(inference_result)
