@@ -10,7 +10,7 @@ from model import train_model, compute_model_metrics, inference, MissingModelExc
 @pytest.fixture
 def test_dataframe():
     dataframe = pd.DataFrame({
-        "id": [1, 2, 3, 4, 5],
+        "identifier": [1, 2, 3, 4, 5],
         "feature_one": [11, 22, 33, 44, 55],
         "feature_two": [55, 33, 11, 22, 44],
         "prediction_target": [0, 1, 0, 1, 1]

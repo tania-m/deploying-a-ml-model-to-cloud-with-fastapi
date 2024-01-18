@@ -4,6 +4,7 @@ from data import process_data
 
 
 class MissingModelException(Exception):
+    # Placeholder exception to have a named exception
     pass
 
 
@@ -39,14 +40,14 @@ def train_model(X_train, y_train):
     number_of_trees = 50 # default is 100
     random_seed = 24 # for reproduceable runs
     # max_depth = 150 # reduces risk of overfitting
-    
+
     # Initialize RandomForestClassifier
     print("Using Random Forest Classifier")
     model = RandomForestClassifier(
         n_estimators=number_of_trees,
         random_state=random_seed,
         verbose=1)
-    
+
     # Fitting model
     print("Fitting model")
     model.fit(X_train, y_train)
@@ -76,10 +77,10 @@ def compute_model_metrics(y, preds, beta_value=1):
 
     # true positives / (true positives + false positives)
     precision = precision_score(y, preds, zero_division=1)
-    
+
     # true positives / (true positives + false negatives)
     recall = recall_score(y, preds, zero_division=1)
-    
+
     # contrary to f1, fbeta defines a weight 
     # to balance between precision and recall using the beta parameter
     # when beta_value = 1, we have the F1 score
@@ -138,7 +139,7 @@ def compute_slice_performance(model, encoder, lb, categorical_features, slice_fe
     with open(slice_output_filename, "w") as slice_results_file:
         for row_item in slice_details:
             slice_results_file.write(f"{row_item[0]}, {row_item[1]}: {row_item[2]}, {row_item[3]}, {row_item[4]}\n")
-    
+
     return slice_details
 
 
