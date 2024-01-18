@@ -6,7 +6,7 @@ def clean_dataset():
     """
 
     # Read dataset skipping all leading and trailing whitespaces
-    df = pd.read_csv("data/census.csv")
+    df = pd.read_csv("data/census.csv", skipinitialspace=True)
     print("Data loaded from data/census.csv")
     
     # Remove all leading and trailing whitespaces from string (object) fields
