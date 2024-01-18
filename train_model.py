@@ -93,13 +93,14 @@ with open(f1_scoring_results_path, "w") as scoring_file:
     print(f"f1_score saved to {f1_scoring_results_path}")
     
 # Compute slices performance
-print("Computing slices performance")
+target_slices = ["workclass", "occupation", "sex"]
+print(f"Computing slices performance on {target_slices} slices")
 compute_slice_performance(
     model,
     encoder, 
     lb, 
     cat_features, 
-    ["workclass", "occupation", "sex"], 
+    target_slices, 
     data,
     target_label
 )
