@@ -91,7 +91,7 @@ f1_scoring_results_path = os.path.join(model_folder_name, "f1_score.txt")
 with open(f1_scoring_results_path, "w") as scoring_file:
     scoring_file.write(str(f1_score))
     print(f"f1_score saved to {f1_scoring_results_path}")
-    
+
 # Compute slices performance
 target_slices = ["workclass", "occupation", "sex"]
 print(f"Computing slices performance on {target_slices} slices")

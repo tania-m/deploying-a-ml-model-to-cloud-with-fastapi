@@ -8,7 +8,6 @@ class MissingModelException(Exception):
     pass
 
 
-# Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
     """
     Trains a machine learning model and returns it.
