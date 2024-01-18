@@ -1,6 +1,7 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
+from data import process_data
 
 
 class MissingModelException(Exception):
@@ -89,10 +90,57 @@ def compute_model_metrics(y, preds, beta_value=1):
     return precision, recall, fbeta
 
 
-def compute_slice_performance():
+def compute_slice_performance(model, encoder, lb, categorical_features, slice_features, processed_df, target_label):
     """ Compute performance on slices of data 
         for categorical features
+        
+        Inputs
+        ------
+        model : trained machine learning model.
+        encoder : OneHot categorical encoder
+        lb : label binarizer
+        categorical_features: list of categorical 
+            features
+        slice_features: feature(s) to slice on
+        processed_df: dataframe to use for slice
+            performance computing (not pre-processed,
+            process_data will be recalled here)
+        targer_label: Name of the label column in `X`
+            for process_data
+        Returns
+        -------
+        SLicing performance evaluation results
+        
     """
+    
+    # Results placeholder
+    slice_details = []
+    
+    # In case we got only one feature
+    if not isinstance(slice_features, list):
+        slice_features = [slice_features]
+    
+    # Go over list of feature slices
+    for feature in slice_features:
+        # For the available categorical values...
+        for value in processed_df[feature].unique():
+            X_slice = processed_df[processed_df[feature] == value]
+            # Prepare dataset
+            X_slice, y_slice, _, _ = process_data(
+                X_slice, categorical_features, label=target_label, training=False, encoder=encoder, lb=lb)
+            # Predictions and model evaluation
+            y_preds = inference(model, X_slice)
+            precision, recall, f1_score = compute_model_metrics(y_slice, y_preds)
+            # Keep results
+            slice_details.append([feature, value, precision, recall, f1_score])
+
+    # Write results to file
+    slice_output_filename = "slice_output.txt"
+    with open(slice_output_filename, "w") as slice_results_file:
+        for row_item in slice_details:
+            slice_results_file.write(f"{row_item[0]}, {row_item[1]}: {row_item[2]}, {row_item[3]}, {row_item[4]}\n")
+    
+    return slice_details
 
 
 def inference(model, X):
