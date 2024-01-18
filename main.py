@@ -1,12 +1,20 @@
+import os
 import uvicorn
 from pydantic import Field, BaseModel
 from fastapi import FastAPI
+import pickle
+import pandas as pd
+from data import process_data
+from model import inference
+
 
 app = FastAPI()
 
-# Data submitted by POST
+
+# Schema for data submitted by POST
 class PredictionRequestData(BaseModel):
     # Examples taken from first few lines of data
+    # TODO: Define aliases
     age: int = Field(example=39)
     workclass: str = Field(examples=["State-gov", "Self-emp-not-inc", "Private"])
     fnlgt: int = Field(example=77516)
@@ -23,6 +31,46 @@ class PredictionRequestData(BaseModel):
     native_country: str = Field(examples=["United-States", "Cuba", "Jamaica"])
 
 
+# Load model and supporting files
+file_mode = "rb"
+model_folder_path = "model"
+
+print("Starting API server: Loading files")
+
+model_name = "model.pkl"
+model_full_path = os.path.join(model_folder_path, model_name)
+model = pickle.load(open(model_full_path, file_mode))
+print(f"Starting API server: Model loaded from {model_full_path}")
+
+encoder_name = "encoder.pkl"
+encoder_full_path = os.path.join(model_folder_path, encoder_name)
+encoder = pickle.load(open(encoder_full_path, file_mode))
+print(f"Starting API server: Encoder loaded from {encoder_full_path}")
+
+label_binarizer_name = "lb.pkl"
+label_binarizer_full_path = os.path.join(model_folder_path, label_binarizer_name)
+lb = pickle.load(open(label_binarizer_full_path, file_mode))
+print(f"Starting API server: Label binarizer loaded from {label_binarizer_full_path}")
+
+
+# Setup known configs
+is_training = False
+x_label= None 
+
+categorical_features = [
+    "workclass",
+    "education",
+    "marital-status",
+    "occupation",
+    "relationship",
+    "race",
+    "sex",
+    "native-country",
+]
+print(f"Supported (known) categorical features: {categorical_features}")
+
+
+# Routes ##############################################################################
 # Root route 
 @app.get("/")
 async def root_route():
@@ -33,13 +81,46 @@ async def root_route():
 # Inference route
 @app.post("/predict")
 async def inference_route(request_data: PredictionRequestData):
-    print("Hitting post route")
-    return {"message": request_data}
+    inference_data_item = {
+        "age": request_data.age,
+        "workclass": request_data.workclass, 
+        "fnlgt": request_data.fnlgt,
+        "education": request_data.education,
+        "education-num": request_data.education_num,
+        "marital-status": request_data.marital_status,
+        "occupation": request_data.occupation,
+        "relationship": request_data.relationship,
+        "race": request_data.race,
+        "sex": request_data.sex,
+        "capital-gain": request_data.capital_gain,
+        "capital-loss": request_data.capital_loss,
+        "hours-per-week": request_data.hours_per_week,
+        "native-country": request_data.native_country
+    }
+
+    input_data = pd.DataFrame(inference_data_item, index=[0])
+    processed_X, y, encoder_from_processing, lb_from_processing = process_data(
+        input_data,
+        categorical_features, # set at server startup
+        x_label, # set at server startup
+        is_training, # set at server startup
+        encoder, # loaded at server startup
+        lb # loaded at server startup
+    )
+
+    inference_result = inference(model, processed_X)
+    # parse prediction to return a nicer result
+    # use label binarizer inverse operation to do so, since we have it
+    inference_result_values = lb.inverse_transform(inference_result)
+    parsed_prediction = inference_result_values[0]
+
+    result = {"predictions": str(parsed_prediction)}
+    return result
 
 
 if __name__ == "__main__":
     host_name = "0.0.0.0"
-    port_number = 8080
+    port_number = 8000
     uvicorn.run("main:app",
                 host=host_name,
                 port=port_number,

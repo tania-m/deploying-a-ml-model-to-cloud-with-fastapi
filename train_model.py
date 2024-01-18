@@ -18,7 +18,7 @@ print(f"Data loaded from {data_location}!")
 print("Train-test split")
 train, test = train_test_split(data, test_size=0.20)
 
-cat_features = [
+categorical_features = [
     "workclass",
     "education",
     "marital-status",
@@ -32,15 +32,22 @@ cat_features = [
 target_label = "salary"
 print("Processing training datasets")
 X_train, y_train, encoder, lb = process_data(
-    train, categorical_features=cat_features, label=target_label, training=True
+    train, 
+    categorical_features, 
+    target_label, 
+    training=True
 )
 
-# Proces the test data with the process_data function
+# Process the test data with the process_data function
 print("Processing test datasets")
 # Reuse encoder and lb from training dataset processing
 X_test, y_test, encoder_test, lb_test = process_data(
-    test, categorical_features=cat_features, label=target_label, training=False,
-    encoder=encoder, lb=lb
+    test,
+    categorical_features,
+    target_label,
+    False, # not training here
+    encoder,
+    lb
 )
 
 # Train and save a model
@@ -99,7 +106,7 @@ compute_slice_performance(
     model,
     encoder, 
     lb, 
-    cat_features, 
+    categorical_features, 
     target_slices, 
     data,
     target_label

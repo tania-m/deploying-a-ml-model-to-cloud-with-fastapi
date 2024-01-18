@@ -40,7 +40,7 @@ def train_model(X_train, y_train):
     number_of_trees = 50 # default is 100
     random_seed = 24 # for reproduceable runs
     # max_depth = 150 # reduces risk of overfitting
-
+    
     # Initialize RandomForestClassifier
     print("Using Random Forest Classifier")
     model = RandomForestClassifier(
@@ -77,10 +77,10 @@ def compute_model_metrics(y, preds, beta_value=1):
 
     # true positives / (true positives + false positives)
     precision = precision_score(y, preds, zero_division=1)
-
+    
     # true positives / (true positives + false negatives)
     recall = recall_score(y, preds, zero_division=1)
-
+    
     # contrary to f1, fbeta defines a weight 
     # to balance between precision and recall using the beta parameter
     # when beta_value = 1, we have the F1 score
@@ -127,7 +127,12 @@ def compute_slice_performance(model, encoder, lb, categorical_features, slice_fe
             X_slice = processed_df[processed_df[feature] == value]
             # Prepare dataset
             X_slice, y_slice, _, _ = process_data(
-                X_slice, categorical_features, label=target_label, training=False, encoder=encoder, lb=lb)
+                X_slice,
+                categorical_features,
+                label=target_label,
+                training=False,
+                encoder=encoder,
+                lb=lb)
             # Predictions and model evaluation
             y_preds = inference(model, X_slice)
             precision, recall, f1_score = compute_model_metrics(y_slice, y_preds)
@@ -139,7 +144,7 @@ def compute_slice_performance(model, encoder, lb, categorical_features, slice_fe
     with open(slice_output_filename, "w") as slice_results_file:
         for row_item in slice_details:
             slice_results_file.write(f"{row_item[0]}, {row_item[1]}: {row_item[2]}, {row_item[3]}, {row_item[4]}\n")
-
+    
     return slice_details
 
 
