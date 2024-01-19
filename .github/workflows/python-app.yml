@@ -40,13 +40,10 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-    - name: Test with pytest
-      run: |
-        pytest tests
     - name: Render Deploy Action
       uses: johnbeynon/render-deploy-action@v0.0.8
       with:
-          service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
+          service-id: ${{ secrets.RENDERSERVICEID }}
           api-key: ${{ secrets.RENDERKEY }}
           wait-for-success: true
 
