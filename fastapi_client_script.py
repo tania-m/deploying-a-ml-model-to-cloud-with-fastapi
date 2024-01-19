@@ -3,9 +3,9 @@ import json
 
 
 def make_request(target_url, data_from_json):
-    """ Make a POST request to a target URL with 
+    """ Make a POST request to a target URL with
     JSON data.
-    
+
     Inputs
         ------
         target_url: target HTTP(S) URL
@@ -17,7 +17,8 @@ def make_request(target_url, data_from_json):
         request_results: request (predictions) results
     """
 
-    request_results = requests.post(target_url, json=data_from_json)
+    request_results = requests.post(target_url,
+                                    json=data_from_json)
     status_code = request_results.status_code
     print(f"Request status code: {status_code}")
     print(request_results.json())
@@ -28,9 +29,9 @@ def make_request(target_url, data_from_json):
 
 
 if __name__ == "__main__":
-    target_url = "http://127.0.0.1:8000/predict" # default local
-    # target_url = "https://tam-udacity-deploy-model-to-cloud.onrender.com/predict"
-    
+    target_url = "http://127.0.0.1:8000/predict"
+    # default local
+
     test_data_source_file = "tests/test-request.json"
     with open(test_data_source_file) as json_file:
         data_from_json = json.load(json_file)

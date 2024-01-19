@@ -112,19 +112,19 @@ print('The scikit-learn version is {}.'.format(sklearn.__version__))
 model_name = "model.pkl"
 model_full_path = os.path.join(model_folder_path, model_name)
 model = pickle.load(open(model_full_path, file_mode))
-print(f"Starting API server: Model loaded from {model_full_path}")
+print(f" Model loaded from {model_full_path}")
 
 encoder_name = "encoder.pkl"
 encoder_full_path = os.path.join(model_folder_path, encoder_name)
 encoder = pickle.load(open(encoder_full_path, file_mode))
-print(f"Starting API server: Encoder loaded from {encoder_full_path}")
+print(f"Encoder loaded from {encoder_full_path}")
 
 label_binarizer_name = "lb.pkl"
 label_binarizer_full_path = os.path.join(
     model_folder_path, label_binarizer_name)
 lb = pickle.load(open(label_binarizer_full_path, file_mode))
 print(
-    f"Starting API server: Label binarizer loaded from {label_binarizer_full_path}")
+    f"Label binarizer loaded from {label_binarizer_full_path}")
 
 
 # Setup known configs
@@ -141,10 +141,10 @@ categorical_features = [
     "sex",
     "native-country",
 ]
-print(f"Supported (known) categorical features: {categorical_features}")
+print(f"Supported categorical features: {categorical_features}")
 
 
-# Routes #################################################################
+# Routes ####################################
 # Root route
 @app.get("/")
 async def root_route():
@@ -160,8 +160,10 @@ async def inference_route(request_data: PredictionRequestData):
     inference_result = inference(model, processed_X)
 
     # parse prediction to return a nicer result
-    # use label binarizer inverse operation to do so, since we have it
-    inference_result_values = lb.inverse_transform(inference_result)
+    # use label binarizer inverse operation to do so,
+    # since we have it
+    inference_result_values = lb.inverse_transform(
+        inference_result)
     parsed_prediction = inference_result_values[0]
 
     result = {"predictions": str(parsed_prediction)}
