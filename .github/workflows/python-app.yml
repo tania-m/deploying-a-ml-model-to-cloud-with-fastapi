@@ -45,6 +45,5 @@ jobs:
       with:
           service-id: ${{ secrets.RENDERSERVICEID }}
           api-key: ${{ secrets.RENDERKEY }}
-          wait-for-success: true
 
 
