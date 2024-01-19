@@ -1,6 +1,8 @@
-#
+# Deploy ML model to cloud
 
-# Environment Set up
-* Download and install conda if you don’t have it already.
-    * Use the supplied requirements file to create a new environment, or
-    * conda create -n [envname] "python=3.8" scikit-learn dvc pandas numpy pytest jupyter jupyterlab fastapi uvicorn -c conda-forge
+(Udacity nanodegree project).
+
+## Notes
+- To run the API server locally, run `python main.py`.
+- To test: `pytest tests`.
+- To use a (script) client, change the target URL in the script and run `python fastapi_client_script.py`. (Note that the deployed service is currently suspended).
