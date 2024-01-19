@@ -1,3 +1,5 @@
+# flake8: noqa
+
 from os import path
 
 import argparse
