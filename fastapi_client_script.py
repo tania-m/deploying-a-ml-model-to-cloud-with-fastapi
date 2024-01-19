@@ -27,6 +27,7 @@ def make_request(target_url, data_from_json):
 
 
 if __name__ == "__main__":
+    # For local testing
     target_url = "http://localhost:8000/predict"
     
     test_data_source_file = "tests/test-request-2.json"
