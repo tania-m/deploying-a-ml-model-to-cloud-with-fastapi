@@ -69,7 +69,7 @@ def test_post_inference_validation_error(api_client):
     """
     Tests POST can run inference
     """
-    # Simulate curl -d @tests/test-request.json -H "Content-Type: application/json" -H "Accept: application/json" http://localhost:8000/predict
+    # Simulate curl -d @tests/test-request-invalid.json -H "Content-Type: application/json" -H "Accept: application/json" http://localhost:8000/predict
 
     test_data_source_file = "tests/test-request-invalid.json"
     with open(test_data_source_file) as json_file:
