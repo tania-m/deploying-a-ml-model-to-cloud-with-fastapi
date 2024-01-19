@@ -26,9 +26,9 @@ The model is intended to classify individuals in two income categories:
 
 ## Metrics
 The model has been scored on 3 evaluation metrics:
-- precision (true positives / (true positives + false positives)), with a valued performance of 0.75;
-- recall (true positives / (true positives + false negatives)), with a valued performance of 0.62;
-- f1 score (f beta score with beta = 1), with a valued performance of 0.68.
+- precision (true positives / (true positives + false positives)), with a valued performance of 0.73;
+- recall (true positives / (true positives + false negatives)), with a valued performance of 0.60;
+- f1 score (f beta score with beta = 1), with a valued performance of 0.67.
 
 ## Ethical Considerations
 - The dataset is on the smaller side and should be used with care for predictions.
