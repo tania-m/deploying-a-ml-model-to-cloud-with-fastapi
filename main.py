@@ -2,6 +2,7 @@ import os
 import uvicorn
 from pydantic import Field, BaseModel
 from fastapi import FastAPI
+import sklearn
 import pickle
 import pandas as pd
 from data import process_data
@@ -94,6 +95,11 @@ file_mode = "rb"
 model_folder_path = "model"
 
 print("Starting API server: Loading files")
+
+if os.environ.get("RENDER_SERVICE_ID") is not None:
+    service_id = os.environ["RENDER_SERVICE_ID"]
+    print(f"Service ID: {service_id}")
+print('The scikit-learn version is {}.'.format(sklearn.__version__))
 
 model_name = "model.pkl"
 model_full_path = os.path.join(model_folder_path, model_name)
