@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 def clean_dataset():
     """
     Cleans the initial dataset data/census.csv
@@ -19,14 +20,16 @@ def clean_dataset():
     initial_shape = df.shape
     print(f"Initial dataset shape: {initial_shape}")
 
-    # Remove lines with unknown values marked by a question mark, as we won't do imputation
+    # Remove lines with unknown values marked by a question mark, as we won't
+    # do imputation
     for column in df.columns:
         df = df.drop(df[df[column] == "?"].index)
 
     processed_shape = df.shape
     print(f"Processed dataset shape: {processed_shape}")
     lines_removed = initial_shape[0] - processed_shape[0]
-    print(f"{lines_removed} lines containing unknown values (?) removed ({lines_removed / initial_shape[0] * 100} %)")
+    print(
+        f"{lines_removed} ({lines_removed / initial_shape[0] * 100} %)")
 
     # Saving cleaned dataset to new file
     print("Cleaned data saved to data/census_clean.csv")

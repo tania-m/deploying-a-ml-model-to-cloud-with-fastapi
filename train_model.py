@@ -26,15 +26,16 @@ categorical_features = [
 ]
 target_label = "salary"
 
-# Optional enhancement, use K-fold cross validation instead of a train-test split
+# Optional enhancement, use K-fold cross validation instead of a
+# train-test split
 print("Train-test split")
 train, test = train_test_split(data, test_size=0.20)
 
 print("Processing training datasets")
 X_train, y_train, encoder, lb = process_data(
-    train, 
-    categorical_features, 
-    target_label, 
+    train,
+    categorical_features,
+    target_label,
     training=True
 )
 
@@ -45,7 +46,7 @@ X_test, y_test, encoder_test, lb_test = process_data(
     test,
     categorical_features,
     target_label,
-    False, # not training here
+    False,  # not training here
     encoder,
     lb
 )
@@ -103,10 +104,10 @@ target_slices = ["workclass", "occupation", "sex"]
 print(f"Computing slices performance on {target_slices} slices")
 compute_slice_performance(
     model,
-    encoder, 
-    lb, 
-    categorical_features, 
-    target_slices, 
+    encoder,
+    lb,
+    categorical_features,
+    target_slices,
     data,
     target_label
 )
