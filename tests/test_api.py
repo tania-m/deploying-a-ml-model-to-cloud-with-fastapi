@@ -23,7 +23,7 @@ def test_get_welcome_root_route(api_client):
     route_under_test = "/"
     request_result = api_client.get(route_under_test)
 
-    assert request_result.status_code == 200, "GET request to root route failed"
+    assert request_result.status_code == 200, "GET request failed"
     assert request_result.json() is not None
     assert request_result.json(
     )["message"] == "Welcome to a data science pipeline server"
@@ -44,11 +44,11 @@ def test_post_inference_larger_50K(api_client):
     route_under_test = "/predict"
     request_result = api_client.post(route_under_test, json=data_from_json)
 
-    assert request_result.status_code == 200, "POST request for inference failed"
+    assert request_result.status_code == 200, "POST request failed"
     assert request_result.json(
-    ) is not None, "Inference POST endpoint failed to respond in JSON format"
+    ) is not None, "POST endpoint failed to respond in JSON format"
     assert request_result.json()[
-        "predictions"] == ">50K", "Inference POST endpoint failed to make correct prediction"
+        "predictions"] == ">50K", "POST endpoint failed to make prediction"
 
 
 def test_post_inference_smaller_than_or_equal_50K(api_client):
@@ -66,11 +66,11 @@ def test_post_inference_smaller_than_or_equal_50K(api_client):
     route_under_test = "/predict"
     request_result = api_client.post(route_under_test, json=data_from_json)
 
-    assert request_result.status_code == 200, "POST request for inference failed"
+    assert request_result.status_code == 200, "POST request failed"
     assert request_result.json(
     ) is not None, "Inference POST endpoint failed to respond in JSON format"
     assert request_result.json()[
-        "predictions"] == "<=50K", "Inference POST endpoint failed to make correct prediction"
+        "predictions"] == "<=50K", "Inference failed prediction"
 
 
 # Negative tests
@@ -89,4 +89,4 @@ def test_post_inference_validation_error(api_client):
     route_under_test = "/predict"
     request_result = api_client.post(route_under_test, json=data_from_json)
 
-    assert request_result.status_code == 422, "POST request validation should fail but did not"
+    assert request_result.status_code == 422, "POST request should fail"

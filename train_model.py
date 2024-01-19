@@ -3,10 +3,10 @@
 import pandas as pd
 import os
 import pickle
-from data import process_data
 from sklearn.model_selection import train_test_split
 from data import process_data
-from model import train_model, inference, compute_model_metrics, compute_slice_performance
+from model import train_model, inference
+from model import compute_model_metrics, compute_slice_performance
 
 # Add code to load the data.
 data_location = "data/census_clean.csv"

@@ -4,7 +4,9 @@ import pytest
 import numpy as np
 import pandas as pd
 
-from model import train_model, compute_model_metrics, inference, MissingModelException
+from model import train_model, inference
+from model import compute_model_metrics
+from model import MissingModelException
 
 
 # Fixture(s)

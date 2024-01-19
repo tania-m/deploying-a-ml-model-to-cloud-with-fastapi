@@ -152,8 +152,10 @@ def compute_slice_performance(
     # Write results to file
     with open(slice_output_filename, "w") as slice_results_file:
         for row_item in slice_details:
+            heading = f"{row_item[0]}, {row_item[1]}"
+            line_scores = f"{row_item[2]}, {row_item[3]}, {row_item[4]}"
             slice_results_file.write(
-                f"{row_item[0]}, {row_item[1]}: {row_item[2]}, {row_item[3]}, {row_item[4]}\n")
+                f"{heading}: {line_scores}\n")
 
     return slice_details
 
