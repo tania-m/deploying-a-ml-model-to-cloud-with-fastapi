@@ -3,12 +3,13 @@
 import pytest
 import numpy as np
 import pandas as pd
+
 from model import train_model, compute_model_metrics, inference, MissingModelException
 
 
 # Fixture(s)
-@pytest.fixture
-def test_dataframe():
+@pytest.fixture(scope="module")
+def example_dataframe():
     dataframe = pd.DataFrame({
         "identifier": [1, 2, 3, 4, 5],
         "feature_one": [11, 22, 33, 44, 55],
@@ -126,14 +127,14 @@ def test_compute_model_metrics_using_f1_score():
     assert fbeta > 0.33 and fbeta < 0.34
 
 
-def test_trains_model_as_random_forest(test_dataframe):
+def test_runs_inference(example_dataframe):
     """
     Test a trained model can run inferences
     (also inderectly adds coverage for train_model)
     """
 
-    source_data = test_dataframe[["feature_one"]]
-    y_train = test_dataframe["prediction_target"]
+    source_data = example_dataframe[["feature_one"]]
+    y_train = example_dataframe["prediction_target"]
     trained_test_model = train_model(
         source_data, 
         y_train)
