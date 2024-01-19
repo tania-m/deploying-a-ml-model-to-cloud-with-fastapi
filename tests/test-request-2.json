@@ -1,0 +1,16 @@
+{
+    "age": 22,
+    "workclass": "Private",
+    "fnlgt": 201490,
+    "education": "HS-grad",
+    "education_num": 9,
+    "marital_status": "Never-married",
+    "occupation": "Adm-clerical",
+    "relationship": "Own",
+    "race": "White",
+    "sex": "Male",
+    "capital_gain": 0,
+    "capital_loss": 0,
+    "hours_per_week": 20,
+    "native_country": "United-States"
+}

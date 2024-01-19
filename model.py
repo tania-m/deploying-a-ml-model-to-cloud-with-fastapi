@@ -67,6 +67,9 @@ def compute_model_metrics(y, preds, beta_value=1):
         Known labels, binarized.
     preds : np.array
         Predicted labels, binarized.
+    beta_value: int
+        beta coefficient, defaults to 1
+        for f1_score.
     Returns
     -------
     precision : float
@@ -121,7 +124,8 @@ def compute_slice_performance(model, encoder, lb, categorical_features, slice_fe
     # Go over list of feature slices
     for feature in slice_features:
         # For the available categorical values...
-        for value in processed_df[feature].unique():
+        possible_values = processed_df[feature].unique()
+        for value in possible_values:
             X_slice = processed_df[processed_df[feature] == value]
             # Prepare dataset
             X_slice, y_slice, _, _ = process_data(
@@ -134,7 +138,7 @@ def compute_slice_performance(model, encoder, lb, categorical_features, slice_fe
             # Predictions and model evaluation
             y_preds = inference(model, X_slice)
             precision, recall, f1_score = compute_model_metrics(y_slice, y_preds)
-            # Keep track of results
+            # Keep track of evaluation results
             slice_details.append([feature, value, precision, recall, f1_score])
 
     # Write results to file
