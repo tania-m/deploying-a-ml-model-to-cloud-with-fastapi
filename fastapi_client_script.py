@@ -28,8 +28,6 @@ def make_request(target_url, data_from_json):
 
 
 if __name__ == "__main__":
-    # For local testing
-    # target_url = "http://localhost:10000/predict"
     target_url = "https://tam-udacity-deploy-model-to-cloud.onrender.com/predict"
     
     test_data_source_file = "tests/test-request.json"

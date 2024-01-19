@@ -96,6 +96,9 @@ model_folder_path = "model"
 
 print("Starting API server: Loading files")
 
+if os.environ.get("RENDER_SERVICE_ID") is not None:
+    service_id = os.environ["RENDER_SERVICE_ID"]
+    print(f"Service ID: {service_id}")
 print('The scikit-learn version is {}.'.format(sklearn.__version__))
 
 model_name = "model.pkl"
