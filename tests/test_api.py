@@ -14,6 +14,7 @@ def api_client():
     return client
 
 
+# Positive tests
 def test_get_welcome_root_route(api_client):
     """
     Tests root route page
@@ -24,7 +25,7 @@ def test_get_welcome_root_route(api_client):
     
     assert request_result.status_code == 200, "GET request to root route failed"
     assert request_result.json() is not None 
-    # We're not testing exact test response here, to be flexible to change it 
+    assert request_result.json()["message"] == "Welcome to a data science pipeline server"
 
 
 def test_post_inference_larger_50K(api_client):
@@ -61,3 +62,20 @@ def test_post_inference_smaller_than_or_equal_50K(api_client):
     assert request_result.status_code == 200, "POST request for inference failed"
     assert request_result.json() is not None, "Inference POST endpoint failed to respond in JSON format" 
     assert request_result.json()["predictions"] == "<=50K", "Inference POST endpoint failed to make correct prediction"
+
+
+# Negative tests
+def test_post_inference_validation_error(api_client):
+    """
+    Tests POST can run inference
+    """
+    # Simulate curl -d @tests/test-request.json -H "Content-Type: application/json" -H "Accept: application/json" http://localhost:8000/predict
+
+    test_data_source_file = "tests/test-request-invalid.json"
+    with open(test_data_source_file) as json_file:
+        data_from_json = json.load(json_file)
+    
+    route_under_test = "/predict"
+    request_result = api_client.post(route_under_test, json=data_from_json)
+
+    assert request_result.status_code == 422, "POST request validation should fail but did not"
