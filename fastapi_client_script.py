@@ -28,7 +28,8 @@ def make_request(target_url, data_from_json):
 
 
 if __name__ == "__main__":
-    target_url = "https://tam-udacity-deploy-model-to-cloud.onrender.com/predict"
+    target_url = "http://127.0.0.1:8000/predict" # default local
+    # target_url = "https://tam-udacity-deploy-model-to-cloud.onrender.com/predict"
     
     test_data_source_file = "tests/test-request.json"
     with open(test_data_source_file) as json_file:
